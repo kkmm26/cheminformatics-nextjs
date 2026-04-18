@@ -1,10 +1,15 @@
-import Image from "next/image";
+import { FileUpload } from "@/components/file-upload/file-upload";
+import { Table } from "@/components/table/table";
+import { getMolecules } from "@/app/actions/molecules";
 
-export default function Home() {
+export default async function Home() {
+  const molecules = await getMolecules();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        
+    <div className="min-h-screen bg-background">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <FileUpload />
+        <Table molecules={molecules} />
       </main>
     </div>
   );

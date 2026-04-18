@@ -25,3 +25,5 @@ export const atoms = sqliteTable("atoms", {
   z: real("z").notNull(),
   atomIndex: integer("atom_index").notNull(),
 });
+
+export type Molecule = typeof molecules.$inferSelect;
