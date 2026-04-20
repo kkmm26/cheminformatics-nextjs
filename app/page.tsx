@@ -1,6 +1,7 @@
 import { FileUpload } from "@/components/file-upload/file-upload";
 import { MoleculeTable } from "@/components/molecule-table/molecule-table";
-import { getMolecules } from "@/app/actions/molecules";
+import { getMolecules } from "@/app/actions/get-molecules";
+import { Toaster } from "@/components/ui/sonner";
 
 export default async function Home() {
   const molecules = await getMolecules();
@@ -11,6 +12,7 @@ export default async function Home() {
         <FileUpload />
         <MoleculeTable rows={molecules} />
       </main>
+      <Toaster />
     </div>
   );
 }

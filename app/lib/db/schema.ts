@@ -28,3 +28,7 @@ export const atoms = sqliteTable("atoms", {
 
 export type Molecule = typeof molecules.$inferSelect;
 export type MoleculeRow = Omit<Molecule, "logPath">;
+export type MoleculeDetail = Molecule & {
+  atomCoords: (typeof atoms.$inferSelect)[];
+};
+export type AtomCoord = typeof atoms.$inferSelect;

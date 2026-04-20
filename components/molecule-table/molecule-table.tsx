@@ -11,6 +11,7 @@ import {
   SearchInput,
   ResultsCounter,
   EmptyState,
+  DeleteSelectedButton,
 } from "./sub-components";
 
 interface MoleculeTableProps {
@@ -28,6 +29,8 @@ export function MoleculeTable({ rows = [] }: MoleculeTableProps) {
     clearAllFilters,
     hasActiveFilters,
     filteredCount,
+    selectedCount,
+    handleDeleteSelected,
   } = useMoleculeTable(rows);
 
   return (
@@ -36,6 +39,10 @@ export function MoleculeTable({ rows = [] }: MoleculeTableProps) {
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <SearchInput value={globalFilter} onChange={setGlobalFilter} />
+          <DeleteSelectedButton
+            selectedCount={selectedCount}
+            onDelete={handleDeleteSelected}
+          />
           <ResultsCounter
             filteredCount={filteredCount}
             totalCount={rows.length}
@@ -96,7 +103,9 @@ export function MoleculeTable({ rows = [] }: MoleculeTableProps) {
                     key={row.id}
                     className={cn(
                       "transition-colors hover:bg-muted/30",
-                      i % 2 === 0 ? "bg-background" : "bg-muted/10",
+                      row.getIsSelected() && "bg-primary/5",
+                      !row.getIsSelected() &&
+                        (i % 2 === 0 ? "bg-background" : "bg-muted/10"),
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (

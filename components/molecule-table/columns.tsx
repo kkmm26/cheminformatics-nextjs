@@ -1,10 +1,11 @@
 import * as React from "react";
 import Link from "next/link";
-import { createColumnHelper, FilterFn } from "@tanstack/react-table";
+import { createColumnHelper, FilterFn, Table } from "@tanstack/react-table";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { ArrowUpDown, ArrowUp, ArrowDown, ExternalLink } from "lucide-react";
 import { MoleculeRow } from "@/app/lib/db/schema";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
 // ─── Fuzzy filter (exported for the main table) ──────────────────────────────
@@ -66,6 +67,33 @@ function SortableHeader({
 
 // ─── Column definitions ───────────────────────────────────────────────────────
 export const columns = [
+  col.display({
+    id: "select",
+    size: 40,
+    minSize: 40,
+    maxSize: 48,
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() ? "indeterminate" : false)
+        }
+        onCheckedChange={(checked) =>
+          table.toggleAllPageRowsSelected(!!checked)
+        }
+        aria-label="Select all rows"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(checked) => row.toggleSelected(!!checked)}
+        aria-label="Select row"
+        onClick={(e) => e.stopPropagation()}
+      />
+    ),
+  }),
+
   col.accessor("filename", {
     size: 140,
     minSize: 120,

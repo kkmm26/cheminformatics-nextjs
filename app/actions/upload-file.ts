@@ -6,12 +6,10 @@ import { db } from "@/app/lib/db";
 import { molecules, atoms } from "@/app/lib/db/schema";
 
 export type UploadResult =
-  | { success: true; moleculeId: string; moleculeName: string }
+  | { success: true; moleculeId: string; fileName: string }
   | { success: false; error: string };
 
-export async function uploadMolecule(
-  formData: FormData,
-): Promise<UploadResult> {
+export async function uploadFile(formData: FormData): Promise<UploadResult> {
   const file = formData.get("file") as File | null;
 
   if (!file) {
@@ -60,14 +58,13 @@ export async function uploadMolecule(
     return {
       success: true,
       moleculeId: String(molecule.id),
-      moleculeName: molecule.filename.replace(".log", ""),
+      fileName: molecule.filename.replace(".log", ""),
     };
   } catch (error) {
     console.error("Upload error:", error);
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to upload molecule",
+      error: error instanceof Error ? error.message : "Failed to upload file",
     };
   }
 }

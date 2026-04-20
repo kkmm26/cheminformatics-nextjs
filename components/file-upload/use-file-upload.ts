@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { uploadMolecule } from "@/app/actions/upload";
+import { uploadFile } from "@/app/actions/upload-file";
 import { UploadState } from "./types";
 import { isValidFile } from "./utils";
 
@@ -73,7 +73,7 @@ export function useFileUpload() {
       const formData = new FormData();
       formData.append("file", file);
       // revalidatePath inside uploadMolecule will refresh the molecules list
-      const result = await uploadMolecule(formData);
+      const result = await uploadFile(formData);
 
       clearInterval(progressTimer);
 
@@ -85,7 +85,7 @@ export function useFileUpload() {
       setState({ status: "uploading", file, progress: 100 });
       // await new Promise((r) => setTimeout(r, 350));
 
-      setState({ status: "success", file, moleculeName: result.moleculeName });
+      setState({ status: "success", file, moleculeName: result.fileName });
     } catch {
       clearInterval(progressTimer);
       setState({

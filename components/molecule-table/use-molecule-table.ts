@@ -8,10 +8,12 @@ import {
   getFilteredRowModel,
   SortingState,
   ColumnFiltersState,
+  RowSelectionState,
 } from "@tanstack/react-table";
 import { MoleculeRow } from "@/app/lib/db/schema";
+import { deleteMolecules } from "@/app/actions/delete-molecules";
 import { columns, fuzzyFilter } from "./columns";
-
+import { toast } from "sonner";
 interface UseMoleculeTableReturn {
   table: ReturnType<typeof useReactTable<MoleculeRow>>;
   globalFilter: string;
@@ -22,11 +24,14 @@ interface UseMoleculeTableReturn {
   clearAllFilters: () => void;
   hasActiveFilters: boolean;
   filteredCount: number;
+  selectedCount: number;
+  handleDeleteSelected: () => Promise<void>;
 }
 
 /**
  * Hook to manage molecule table state, filtering, and tanstack table instance.
- * Encapsulates sorting, global search, and method-based multi-select filtering.
+ * Encapsulates sorting, global search, method-based multi-select filtering,
+ * and row selection for bulk actions.
  */
 export function useMoleculeTable(rows: MoleculeRow[]): UseMoleculeTableReturn {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -34,6 +39,7 @@ export function useMoleculeTable(rows: MoleculeRow[]): UseMoleculeTableReturn {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   // Derive unique methods from data for filter pill UI
   const uniqueMethods = React.useMemo(() => {
@@ -83,17 +89,43 @@ export function useMoleculeTable(rows: MoleculeRow[]): UseMoleculeTableReturn {
   const table = useReactTable({
     data: rows,
     columns,
-    state: { sorting, globalFilter, columnFilters },
+    state: { sorting, globalFilter, columnFilters, rowSelection },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
+    onRowSelectionChange: setRowSelection,
     globalFilterFn: fuzzyFilter,
+    enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
 
   const filteredCount = table.getFilteredRowModel().rows.length;
+  const selectedCount = Object.keys(rowSelection).length;
+
+  const handleDeleteSelected = React.useCallback(async () => {
+    const selectedRows = table.getSelectedRowModel().rows;
+    if (selectedRows.length === 0) return;
+
+    const isConfirmed = window.confirm(
+      `Are you sure you want to delete ${selectedRows.length} molecule(s)?`,
+    );
+
+    if (!isConfirmed) return;
+
+    const ids = selectedRows.map((row) => row.original.id);
+
+    try {
+      await deleteMolecules(ids);
+
+      setRowSelection({});
+      toast.success(`Successfully deleted ${selectedRows.length} molecules.`);
+    } catch (error) {
+      console.error("Failed to delete molecules:", error);
+      toast.error("Failed to delete molecules. Please try again.");
+    }
+  }, [table]);
 
   return {
     table,
@@ -105,5 +137,7 @@ export function useMoleculeTable(rows: MoleculeRow[]): UseMoleculeTableReturn {
     clearAllFilters,
     hasActiveFilters,
     filteredCount,
+    selectedCount,
+    handleDeleteSelected,
   };
 }

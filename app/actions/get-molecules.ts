@@ -4,6 +4,7 @@ import { molecules, type MoleculeRow } from "@/app/lib/db/schema";
 import { db } from "@/app/lib/db";
 import { desc } from "drizzle-orm";
 
+// Get all molecules for table rows (no atomcoords)
 export async function getMolecules(): Promise<MoleculeRow[]> {
   return db
     .select({

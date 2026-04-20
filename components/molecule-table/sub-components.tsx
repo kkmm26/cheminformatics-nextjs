@@ -1,7 +1,13 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SlidersHorizontal, Search, X, FlaskConical } from "lucide-react";
+import {
+  SlidersHorizontal,
+  Search,
+  X,
+  FlaskConical,
+  Trash2,
+} from "lucide-react";
 
 interface MethodFilterProps {
   methods: string[];
@@ -67,6 +73,31 @@ export function SearchInput({ value, onChange }: SearchInputProps) {
         </button>
       )}
     </div>
+  );
+}
+
+interface DeleteSelectedButtonProps {
+  selectedCount: number;
+  onDelete: () => void;
+}
+
+/** Destructive action button shown when one or more rows are selected. */
+export function DeleteSelectedButton({
+  selectedCount,
+  onDelete,
+}: DeleteSelectedButtonProps) {
+  if (selectedCount === 0) return null;
+
+  return (
+    <Button
+      variant="destructive"
+      size="sm"
+      className="h-9 gap-1.5 text-xs font-medium"
+      onClick={onDelete}
+    >
+      <Trash2 className="h-3.5 w-3.5" />
+      Delete {selectedCount} {selectedCount === 1 ? "molecule" : "molecules"}
+    </Button>
   );
 }
 
