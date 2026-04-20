@@ -12,7 +12,7 @@ export default async function Home() {
         <FileUpload />
         <MoleculeTable rows={molecules} />
       </main>
-      <Toaster />
+      <Toaster richColors />
     </div>
   );
 }

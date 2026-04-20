@@ -64,7 +64,7 @@ export function FileUpload() {
             <div className="text-center">
               <p className="text-sm font-medium">Upload complete</p>
               <p className="text-xs text-muted-foreground">
-                <span className="font-mono">{state.moleculeName}</span> added to
+                <span className="font-mono">{state.fileName}</span> added to
                 your library
               </p>
             </div>

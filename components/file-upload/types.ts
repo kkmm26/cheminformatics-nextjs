@@ -3,5 +3,5 @@ export type UploadState =
   | { status: "dragging" }
   | { status: "selected"; file: File }
   | { status: "uploading"; file: File; progress: number }
-  | { status: "success"; file: File; moleculeName: string }
+  | { status: "success"; file: File; fileName: string }
   | { status: "error"; file: File | null; message: string };

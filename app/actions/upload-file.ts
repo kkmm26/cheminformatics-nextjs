@@ -61,7 +61,6 @@ export async function uploadFile(formData: FormData): Promise<UploadResult> {
       fileName: molecule.filename.replace(".log", ""),
     };
   } catch (error) {
-    console.error("Upload error:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to upload file",

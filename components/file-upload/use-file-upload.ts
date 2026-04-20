@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { uploadFile } from "@/app/actions/upload-file";
 import { UploadState } from "./types";
 import { isValidFile } from "./utils";
+import { toast } from "sonner";
 
 export function useFileUpload() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,13 +80,14 @@ export function useFileUpload() {
 
       if (!result.success) {
         setState({ status: "error", file, message: result.error });
+        toast.error(result.error);
         return;
       }
 
       setState({ status: "uploading", file, progress: 100 });
-      // await new Promise((r) => setTimeout(r, 350));
 
-      setState({ status: "success", file, moleculeName: result.fileName });
+      setState({ status: "success", file, fileName: result.fileName });
+      toast.success(`Successfully uploaded ${result.fileName}`);
     } catch {
       clearInterval(progressTimer);
       setState({
@@ -93,6 +95,7 @@ export function useFileUpload() {
         file,
         message: "Something went wrong. Please try again.",
       });
+      toast.error("Failed to upload file. Please try again.");
     }
   }, [state]);
 
