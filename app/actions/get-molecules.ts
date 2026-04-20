@@ -1,8 +1,13 @@
 "use server";
 
-import { molecules, type MoleculeRow } from "@/app/lib/db/schema";
+import {
+  molecules,
+  type MoleculeRow,
+  type MoleculeDetail,
+  atoms,
+} from "@/app/lib/db/schema";
 import { db } from "@/app/lib/db";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 // Get all molecules for table rows (no atomcoords)
 export async function getMolecules(): Promise<MoleculeRow[]> {
@@ -21,4 +26,25 @@ export async function getMolecules(): Promise<MoleculeRow[]> {
     })
     .from(molecules)
     .orderBy(desc(molecules.uploadedAt));
+}
+
+export async function getMoleculeById(
+  id: number,
+): Promise<MoleculeDetail | null> {
+  const molecule = await db
+    .select()
+    .from(molecules)
+    .where(eq(molecules.id, id))
+    .limit(1)
+    .then((rows) => rows[0] || null);
+
+  if (!molecule) return null;
+
+  const atomCoords = await db
+    .select()
+    .from(atoms)
+    .where(eq(atoms.moleculeId, id))
+    .orderBy(atoms.atomIndex);
+
+  return { ...molecule, atomCoords };
 }
