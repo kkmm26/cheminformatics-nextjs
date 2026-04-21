@@ -3,6 +3,7 @@ import { MoleculeTable } from "@/components/molecule-table/molecule-table";
 import { getMolecules } from "@/app/actions/get-molecules";
 import { Toaster } from "@/components/ui/sonner";
 
+export const dynamic = "force-dynamic";
 export default async function Home() {
   const molecules = await getMolecules();
 
