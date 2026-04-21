@@ -1,4 +1,4 @@
-"use client";
+import { AtomCoord } from "@/app/lib/db/schema";
 // ─── Atomic number → element symbol mapping ─────────────────────────────────
 const ELEMENT_SYMBOLS: Record<number, string> = {
   1: "H",
@@ -42,3 +42,18 @@ export const CPK: Record<string, { bg: string; text: string }> = {
   P: { bg: "bg-orange-500", text: "text-white" },
   Si: { bg: "bg-amber-300", text: "text-gray-900" },
 };
+
+// Convert atom coordinates to XYZ format to send request to Python server
+export function toXYZ(atomCoords: AtomCoord[]) {
+  const header = `${atomCoords.length}\ngenerated molecule`;
+
+  const body = atomCoords
+    .sort((a, b) => a.atomIndex - b.atomIndex) // important!
+    .map((atom) => {
+      const symbol = getElementSymbol(atom.atomicNumber);
+      return `${symbol} ${atom.x} ${atom.y} ${atom.z}`;
+    })
+    .join("\n");
+
+  return `${header}\n${body}`;
+}

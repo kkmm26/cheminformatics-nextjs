@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { AtomCoord } from "@/app/lib/db/schema";
 import { cn } from "@/lib/utils";
-import { CPK, getElementSymbol } from "./utils";
+import { CPK, getElementSymbol } from "../../lib/chemistry";
 
 function ElementBadge({ element }: { element: string }) {
   const color = CPK[element] ?? { bg: "bg-muted", text: "text-foreground" };
