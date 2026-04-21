@@ -31,6 +31,7 @@ export default async function MoleculeDetailPage({
 }) {
   const param = await params;
   const molecule = await getMoleculeById(parseInt(param.id));
+  console.log(molecule?.atomCoords);
 
   if (!molecule) notFound();
 

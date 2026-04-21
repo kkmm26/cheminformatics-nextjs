@@ -34,3 +34,4 @@ console.log("Total Entropy:", result.totalEntropy);
 console.log("\n=== ATOMS ===");
 console.log(`Total atoms: ${result.atoms.length}`);
 console.log("First 3 atoms:", result.atoms.slice(0, 3));
+console.log(result)
