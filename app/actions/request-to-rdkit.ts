@@ -1,15 +1,29 @@
 import { toXYZ } from "@/lib/chemistry";
 import { AtomCoord } from "@/app/lib/db/schema";
+import { db } from "@/app/lib/db";
+import { molecules } from "@/app/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export interface RDKitResponse {
   svg: string;
+  // Currently not used by the UI, so it is intentionally left as-is for now.
   mol_block: string;
   success: boolean;
 }
 
 export async function requestToRDKit(
+  moleculeId: number,
   atomCoords: AtomCoord[],
+  structureSvg?: string | null,
 ): Promise<RDKitResponse> {
+  if (structureSvg) {
+    return {
+      svg: structureSvg,
+      mol_block: "",
+      success: true,
+    };
+  }
+
   const xyz = toXYZ(atomCoords);
 
   const res = await fetch(
@@ -31,5 +45,14 @@ export async function requestToRDKit(
     throw new Error(errorData.detail || "Failed to convert XYZ data");
   }
 
-  return res.json() as Promise<RDKitResponse>;
+  const rdkitResponse = (await res.json()) as RDKitResponse;
+
+  if (rdkitResponse.svg) {
+    await db
+      .update(molecules)
+      .set({ structureSvg: rdkitResponse.svg })
+      .where(eq(molecules.id, moleculeId));
+  }
+
+  return rdkitResponse;
 }

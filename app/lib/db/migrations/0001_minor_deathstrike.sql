@@ -1,0 +1,1 @@
+ALTER TABLE `molecules` ADD `structure_svg` text;

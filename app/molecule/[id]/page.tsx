@@ -62,8 +62,10 @@ export default async function MoleculeDetailPage({
       {/* ── 2D Structure with Suspense ── */}
       <Suspense fallback={<StructureSkeleton />}>
         <Structure2DViewer
+          moleculeId={molecule.id}
           atomCoords={molecule.atomCoords}
           filename={molecule.filename}
+          structureSvg={molecule.structureSvg}
         />
       </Suspense>
 
