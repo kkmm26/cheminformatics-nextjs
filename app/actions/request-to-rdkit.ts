@@ -12,16 +12,19 @@ export async function requestToRDKit(
 ): Promise<RDKitResponse> {
   const xyz = toXYZ(atomCoords);
 
-  const res = await fetch("http://127.0.0.1:8000/api/convert-xyz", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetch(
+    "https://cheminformatics-rdkit.onrender.com/api/convert-xyz",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        xyz_data: xyz,
+      }),
+      cache: "no-store",
     },
-    body: JSON.stringify({
-      xyz_data: xyz,
-    }),
-    cache: "no-store",
-  });
+  );
 
   if (!res.ok) {
     const errorData = await res.json();
