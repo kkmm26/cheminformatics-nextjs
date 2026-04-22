@@ -34,7 +34,8 @@ export async function uploadFile(formData: FormData): Promise<UploadResult> {
   if (await doesFilenameExist(file.name)) {
     return {
       success: false,
-      error: "A file with this name already exists. Please rename the file before uploading.",
+      error:
+        "A file with this name already exists. Please rename the file before uploading.",
     };
   }
 
@@ -54,7 +55,6 @@ export async function uploadFile(formData: FormData): Promise<UploadResult> {
         zpveEnergy: parsed.zpveEnergy,
         freeEnergy: parsed.freeEnergy,
         totalEntropy: parsed.totalEntropy,
-        logPath: `/data/${file.name}`,
       })
       .returning({ id: molecules.id, filename: molecules.filename });
 

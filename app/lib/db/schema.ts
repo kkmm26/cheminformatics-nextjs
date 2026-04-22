@@ -11,7 +11,6 @@ export const molecules = sqliteTable("molecules", {
   zpveEnergy: real("zpve_energy"),
   freeEnergy: real("free_energy"),
   totalEntropy: real("total_entropy"),
-  logPath: text("log_path").notNull(),
   structureSvg: text("structure_svg"),
 });
 
@@ -28,7 +27,7 @@ export const atoms = sqliteTable("atoms", {
 });
 
 export type Molecule = typeof molecules.$inferSelect;
-export type MoleculeRow = Omit<Molecule, "logPath" | "structureSvg">;
+export type MoleculeRow = Omit<Molecule, "structureSvg">;
 export type MoleculeDetail = Molecule & {
   atomCoords: (typeof atoms.$inferSelect)[];
 };
