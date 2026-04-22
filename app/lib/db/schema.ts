@@ -12,6 +12,7 @@ export const molecules = sqliteTable("molecules", {
   freeEnergy: real("free_energy"),
   totalEntropy: real("total_entropy"),
   logPath: text("log_path").notNull(),
+  structureSvg: text("structure_svg"),
 });
 
 export const atoms = sqliteTable("atoms", {

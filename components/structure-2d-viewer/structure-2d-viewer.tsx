@@ -18,13 +18,17 @@ export const StructureSkeleton = () => {
 
 // The isolated component that handles the delay
 export const Structure2DViewer = async ({
+  moleculeId,
   atomCoords,
   filename,
+  structureSvg,
 }: {
+  moleculeId: number;
   atomCoords: AtomCoord[];
   filename: string;
+  structureSvg?: string | null;
 }) => {
-  const rdkitResponse = await requestToRDKit(atomCoords);
+  const rdkitResponse = await requestToRDKit(moleculeId, atomCoords, structureSvg);
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm flex flex-col items-center justify-center min-h-[320px] p-8">
