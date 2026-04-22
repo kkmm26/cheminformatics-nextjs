@@ -4,10 +4,21 @@ import { revalidatePath } from "next/cache";
 import { parseMolecule } from "@/app/lib/parser";
 import { db } from "@/app/lib/db";
 import { molecules, atoms } from "@/app/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export type UploadResult =
   | { success: true; moleculeId: string; fileName: string }
   | { success: false; error: string };
+
+export async function doesFilenameExist(filename: string): Promise<boolean> {
+  const existing = await db
+    .select({ id: molecules.id })
+    .from(molecules)
+    .where(eq(molecules.filename, filename))
+    .limit(1);
+
+  return existing.length > 0;
+}
 
 export async function uploadFile(formData: FormData): Promise<UploadResult> {
   const file = formData.get("file") as File | null;
@@ -18,6 +29,13 @@ export async function uploadFile(formData: FormData): Promise<UploadResult> {
 
   if (!file.name.endsWith(".log")) {
     return { success: false, error: "Only Gaussian .log files are supported." };
+  }
+
+  if (await doesFilenameExist(file.name)) {
+    return {
+      success: false,
+      error: "A file with this name already exists. Please rename the file before uploading.",
+    };
   }
 
   try {

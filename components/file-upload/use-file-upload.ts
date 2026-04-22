@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { uploadFile } from "@/app/actions/upload-file";
+import { doesFilenameExist, uploadFile } from "@/app/actions/upload-file";
 import { UploadState } from "./types";
 import { isValidFile } from "./utils";
 import { toast } from "sonner";
@@ -56,6 +56,15 @@ export function useFileUpload() {
   const handleUpload = useCallback(async () => {
     if (state.status !== "selected") return;
     const { file } = state;
+
+    const filenameExists = await doesFilenameExist(file.name);
+    if (filenameExists) {
+      const duplicateMessage =
+        "A file with this name already exists. Please rename the file before uploading.";
+      setState({ status: "error", file, message: duplicateMessage });
+      toast.error(duplicateMessage);
+      return;
+    }
 
     setState({ status: "uploading", file, progress: 10 });
 
