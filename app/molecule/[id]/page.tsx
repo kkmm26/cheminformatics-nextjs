@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { Suspense } from "react"; // <-- Import Suspense
+import { Suspense } from "react";
 import { getMoleculeById } from "@/app/actions/get-molecules";
 import { AtomCoordsTable } from "@/components/atom-coords-table";
 import {
@@ -35,8 +35,13 @@ export default async function MoleculeDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const param = await params;
+  const moleculeId = Number(param.id);
 
-  const molecule = await getMoleculeById(parseInt(param.id));
+  if (!Number.isInteger(moleculeId) || moleculeId <= 0) {
+    notFound();
+  }
+
+  const molecule = await getMoleculeById(moleculeId);
   if (!molecule) notFound();
 
   return (

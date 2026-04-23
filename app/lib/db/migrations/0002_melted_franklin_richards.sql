@@ -1,0 +1,1 @@
+ALTER TABLE `molecules` DROP COLUMN `log_path`;

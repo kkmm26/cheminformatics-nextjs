@@ -25,9 +25,14 @@ export async function requestToRDKit(
   }
 
   const xyz = toXYZ(atomCoords);
+  const apiUrl = process.env.RDKIT_API_URL;
+
+  if (!apiUrl) {
+    throw new Error("RDKIT_API_URL is not configured.");
+  }
 
   const res = await fetch(
-    process.env.RDKIT_API_URL!,
+    apiUrl,
     {
       method: "POST",
       headers: {
@@ -46,6 +51,10 @@ export async function requestToRDKit(
   }
 
   const rdkitResponse = (await res.json()) as RDKitResponse;
+
+  if (!rdkitResponse.success) {
+    throw new Error("RDKit did not return a successful response.");
+  }
 
   if (rdkitResponse.svg) {
     await db
