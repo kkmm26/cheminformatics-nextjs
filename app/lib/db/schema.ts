@@ -27,8 +27,10 @@ export const atoms = sqliteTable("atoms", {
 });
 
 export type Molecule = typeof molecules.$inferSelect;
+export type MoleculeInsert = typeof molecules.$inferInsert;
 export type MoleculeRow = Omit<Molecule, "structureSvg">;
 export type MoleculeDetail = Molecule & {
   atomCoords: (typeof atoms.$inferSelect)[];
 };
 export type AtomCoord = typeof atoms.$inferSelect;
+export type AtomInsert = typeof atoms.$inferInsert;

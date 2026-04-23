@@ -1,24 +1,22 @@
-/**
- * Types
- */
-export type Atom = {
-  atomIndex: number;
-  atomicNumber: number;
-  x: number;
-  y: number;
-  z: number;
-};
+import type { AtomInsert, MoleculeInsert } from "@/app/lib/db/schema";
 
-export type ParsedMolecule = {
-  filename: string;
-  uploadedAt: string;
-  method: string;
-  comment: string;
-  zpveCorrection: number | null;
-  freeEnergyCorrection: number | null;
-  zpveEnergy: number | null;
-  freeEnergy: number | null;
-  totalEntropy: number | null;
+export type Atom = Pick<
+  AtomInsert,
+  "atomIndex" | "atomicNumber" | "x" | "y" | "z"
+>;
+
+export type ParsedMolecule = Pick<
+  MoleculeInsert,
+  | "filename"
+  | "uploadedAt"
+  | "method"
+  | "comment"
+  | "zpveCorrection"
+  | "freeEnergyCorrection"
+  | "zpveEnergy"
+  | "freeEnergy"
+  | "totalEntropy"
+> & {
   atoms: Atom[];
 };
 
