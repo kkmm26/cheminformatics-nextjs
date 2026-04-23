@@ -27,7 +27,7 @@ export async function requestToRDKit(
   const xyz = toXYZ(atomCoords);
 
   const res = await fetch(
-    "https://cheminformatics-rdkit.onrender.com/api/convert-xyz",
+    process.env.RDKIT_API_URL!,
     {
       method: "POST",
       headers: {
