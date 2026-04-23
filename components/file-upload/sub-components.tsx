@@ -4,7 +4,7 @@ import { formatBytes } from "./utils";
 
 export function DropZoneIdle({ dragging }: { dragging: boolean }) {
   return (
-    <div className="flex flex-col items-center gap-3 py-2 pointer-events-none">
+    <div className="flex items-center gap-3 py-2 pointer-events-none">
       <div
         className={cn(
           "rounded-full p-4 transition-colors duration-200",

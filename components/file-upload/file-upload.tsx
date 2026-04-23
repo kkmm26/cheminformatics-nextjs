@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useFileUpload } from "./use-file-upload";
 import { DropZoneIdle, FilePreview, UploadProgress } from "./sub-components";
+import { Input } from "../ui/input";
 
 export function FileUpload() {
   const { state, inputRef, handlers } = useFileUpload();
@@ -25,7 +26,7 @@ export function FileUpload() {
         onDragLeave={handlers.onDragLeave}
         onDrop={handlers.onDrop}
         className={cn(
-          "relative flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed px-6 py-8 text-center transition-all duration-200",
+          "relative flex min-h-25 max-h-25 items-center justify-center gap-4 rounded-xl border-2 border-dashed px-6 py-2 text-center transition-all duration-200",
           "bg-muted/30",
           isClickable &&
             "cursor-pointer hover:bg-muted/50 hover:border-primary/40",
@@ -34,7 +35,7 @@ export function FileUpload() {
           isUploading && "cursor-default pointer-events-none",
         )}
       >
-        <input
+        <Input
           ref={inputRef}
           type="file"
           accept=".log"
@@ -85,9 +86,16 @@ export function FileUpload() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex justify-end gap-2">
+      <div className="flex min-h-5 max-h-5 justify-end gap-2">
         {(state.status === "success" || state.status === "error") && (
-          <Button variant="outline" size="sm" onClick={handlers.reset}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              handlers.reset();
+              handlers.openFilePicker();
+            }}
+          >
             Upload another
           </Button>
         )}
