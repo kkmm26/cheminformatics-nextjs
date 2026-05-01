@@ -20,6 +20,10 @@ export type ParsedMolecule = Pick<
   atoms: Atom[];
 };
 
+/**
+ * Extracts the method section (lines prefixed by '#') and comment section
+ * (the first block after a '-' separator) from a Gaussian output.
+ */
 function parseMetadata(lines: string[]): { method: string; comment: string } {
   let method = "";
   let comment = "";
@@ -53,6 +57,7 @@ function parseMetadata(lines: string[]): { method: string; comment: string } {
   return { method, comment };
 }
 
+/** Reads the last zero-point correction value from the file. */
 function parseZpveCorrection(lines: string[]): number | null {
   for (let i = lines.length - 1; i >= 0; i--) {
     const line = lines[i].trim();
@@ -64,6 +69,7 @@ function parseZpveCorrection(lines: string[]): number | null {
   return null;
 }
 
+/** Reads the last Gibbs free-energy correction value from the file. */
 function parseFreeEnergyCorrection(lines: string[]): number | null {
   for (let i = lines.length - 1; i >= 0; i--) {
     const line = lines[i].trim();
@@ -75,6 +81,7 @@ function parseFreeEnergyCorrection(lines: string[]): number | null {
   return null;
 }
 
+/** Reads the last "electronic + zero-point" total energy value. */
 function parseZpveEnergy(lines: string[]): number | null {
   for (let i = lines.length - 1; i >= 0; i--) {
     const line = lines[i].trim();
@@ -86,6 +93,10 @@ function parseZpveEnergy(lines: string[]): number | null {
   return null;
 }
 
+/**
+ * Reads final free energy and total entropy.
+ * Entropy is expected on a fixed-offset line in the Gaussian summary block.
+ */
 function parseFreeEnergyAndEntropy(lines: string[]): {
   freeEnergy: number | null;
   totalEntropy: number | null;
@@ -107,6 +118,10 @@ function parseFreeEnergyAndEntropy(lines: string[]): {
   return { freeEnergy: null, totalEntropy: null };
 }
 
+/**
+ * Parses atom coordinates from the final "Standard orientation" table.
+ * The final table is used because it corresponds to the converged geometry.
+ */
 function parseAtomCoords(lines: string[]): Atom[] {
   const atoms: Atom[] = [];
 
@@ -134,6 +149,7 @@ function parseAtomCoords(lines: string[]): Atom[] {
   return atoms;
 }
 
+/** Parses a Gaussian `.log` file into the molecule shape used for persistence. */
 export function parseMolecule(
   fileContent: string,
   filename: string,
