@@ -8,7 +8,9 @@
     "db:migrate": "drizzle-kit migrate",
     "build": "npm run db:migrate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:unit": "vitest run --config vitest.config.ts tests/unit",
+    "test:integration": "vitest run --config vitest.config.ts tests/integration"
   },
   "dependencies": {
     "@tanstack/match-sorter-utils": "^8.19.4",
@@ -39,6 +41,7 @@
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.5"
   }
 }
