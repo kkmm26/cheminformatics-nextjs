@@ -11,9 +11,7 @@ import { molecules } from "../lib/db/schema";
 export async function deleteMolecules(ids: number[]): Promise<void> {
   if (ids.length === 0) return;
 
-  db.transaction((tx) => {
-    tx.delete(molecules).where(inArray(molecules.id, ids));
-  });
+  await db.delete(molecules).where(inArray(molecules.id, ids));
 
   revalidatePath("/");
 }
