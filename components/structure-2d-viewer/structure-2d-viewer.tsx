@@ -21,7 +21,6 @@ export const StructureSkeleton = () => {
   );
 };
 
-// The isolated component that handles the delay
 export const Structure2DViewer = async ({
   moleculeId,
   atomCoords,
@@ -33,8 +32,14 @@ export const Structure2DViewer = async ({
   filename: string;
   structureSvg?: string | null;
 }) => {
-  const rdkitResponse = await requestToRDKit(moleculeId, atomCoords, structureSvg);
-  const svgDataUrl = rdkitResponse?.svg ? svgToDataUrl(rdkitResponse.svg) : null;
+  const rdkitResponse = await requestToRDKit(
+    moleculeId,
+    atomCoords,
+    structureSvg,
+  );
+  const svgDataUrl = rdkitResponse?.svg
+    ? svgToDataUrl(rdkitResponse.svg)
+    : null;
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm flex flex-col items-center justify-center min-h-80 p-8">

@@ -10,6 +10,8 @@ import {
   StructureSkeleton,
 } from "@/components/structure-2d-viewer";
 
+export const maxDuration = 300;
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function fmt(value: number | null, decimals = 5): string {
