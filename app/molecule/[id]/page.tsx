@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { getMoleculeById } from "@/app/actions/get-molecules";
 import { AtomCoordsTable } from "@/components/atom-coords-table";
 import {
+  ErrorBoundary as StructureErrorBoundary,
   Structure2DViewer,
   StructureSkeleton,
 } from "@/components/structure-2d-viewer";
@@ -65,14 +66,16 @@ export default async function MoleculeDetailPage({
       </div>
 
       {/* ── 2D Structure with Suspense ── */}
-      <Suspense fallback={<StructureSkeleton />}>
-        <Structure2DViewer
-          moleculeId={molecule.id}
-          atomCoords={molecule.atomCoords}
-          filename={molecule.filename}
-          structureSvg={molecule.structureSvg}
-        />
-      </Suspense>
+      <StructureErrorBoundary>
+        <Suspense fallback={<StructureSkeleton />}>
+          <Structure2DViewer
+            moleculeId={molecule.id}
+            atomCoords={molecule.atomCoords}
+            filename={molecule.filename}
+            structureSvg={molecule.structureSvg}
+          />
+        </Suspense>
+      </StructureErrorBoundary>
 
       {/* ── Data cards grid ── */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

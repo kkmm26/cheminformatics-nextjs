@@ -31,19 +31,16 @@ export async function requestToRDKit(
     throw new Error("RDKIT_API_URL is not configured.");
   }
 
-  const res = await fetch(
-    apiUrl,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        xyz_data: xyz,
-      }),
-      cache: "no-store",
+  const res = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({
+      xyz_data: xyz,
+    }),
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     const errorData = await res.json();
