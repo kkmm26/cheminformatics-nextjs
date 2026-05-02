@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { pingToWakeUp } from "@/app/actions/request-to-rdkit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,11 +18,12 @@ export const metadata: Metadata = {
   description: "Cheminformatics Thesis",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await pingToWakeUp(process.env.RDKIT_API_URL!);
   return (
     <html
       lang="en"

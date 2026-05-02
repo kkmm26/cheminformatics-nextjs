@@ -37,7 +37,7 @@ async function fetchWithTimeout(
 }
 
 // Ping the server first to wake it up
-async function pingToWakeUp(apiUrl: string): Promise<void> {
+export async function pingToWakeUp(apiUrl: string): Promise<void> {
   try {
     await fetchWithTimeout(apiUrl, { method: "GET", cache: "no-store" }, 5000);
   } catch {}
